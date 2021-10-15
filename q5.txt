@@ -1,0 +1,17 @@
+/*
+
+	Query 5: Give the surnames, lastnames and goals from the player who scored the most goals.
+	It is necessary for clubs to scout the most effective players. 
+	The player who scores the most goals, gets the golden shoe.
+	It is easy to see who scored the most goals with this query.
+
+*/
+
+
+
+SELECT surname, lastname, MAX (goals) 
+FROM (SELECT personID,COUNT(personID) goals 
+	FROM Goal
+	GROUP BY personID) a
+		JOIN person b 
+		ON a.personID=b.personID;

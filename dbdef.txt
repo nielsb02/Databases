@@ -1,0 +1,203 @@
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE Soccer_Competition(
+  competitionID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  name VARCHAR(255) NOT NULL,
+  country VARCHAR(255)
+);
+
+CREATE INDEX Soccer_Competition_index ON Soccer_Competition(name);
+
+CREATE TABLE Soccer_Competition_Season(
+  competitionID INTEGER NOT NULL,
+  season INTEGER NOT NULL,
+  start_date DATE,
+  end_date DATE,
+  CONSTRAINT Soccer_Competition_Season_pk PRIMARY KEY(competitionID, season),
+  CONSTRAINT Soccer_Competition_fk_Soccer_Competition FOREIGN KEY(competitionID)
+  		REFERENCES Soccer_Competition(competitionID)
+ );
+ 
+ CREATE TABLE Arena(
+   arenaID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+   name VARCHAR(255) NOT NULL,
+   city VARCHAR(255) NOT NULL,
+   address VARCHAR(255),
+   capacity INTEGER
+ );
+ 
+ CREATE INDEX Arena_name_index ON Arena(name);
+ CREATE INDEX Arena_city_index ON Arena(city);
+ 
+ CREATE TABLE Club(
+   clubID INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT,
+   name VARCHAR(255) NOT NULL,
+   club_year YEAR,
+   country VARCHAR(255),
+   arenaID INTEGER NOT NULL,
+   CONSTRAINT Club_fk_Arena FOREIGN KEY(arenaID)
+   		REFERENCES Arena(arenaID)
+ );
+ 
+ CREATE INDEX Club_name_index ON Club(name); 
+ 
+ CREATE TABLE Team(
+   teamID INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT,
+   name VARCHAR(250) NOT NULL,
+   clubID INTEGER NOT NULL,
+   CONSTRAINT Team_fk_Club FOREIGN KEY(clubID)
+   		REFERENCES Club(clubID)
+ );
+ 
+ CREATE TABLE Teams_Per_Season( 
+   teamID INTEGER NOT NULL,
+   team_season INTEGER NOT NULL,
+   amount_of_players INTEGER,
+   clubID INTEGER NOT NULL, 
+   coach_pid INTEGER NOT NULL,
+   CONSTRAINT Teams_Per_Season_pk PRIMARY KEY(teamID, team_season),
+   CONSTRAINT Teams_Per_Season_fk_Team FOREIGN KEY(teamID)
+   		REFERENCES Team(teamID),
+   CONSTRAINT Teams_Per_Season_fk_Club FOREIGN KEY(clubID) 
+   		REFERENCES Club(clubID),
+   CONSTRAINT Teams_Per_Season_fk_Coach FOREIGN KEY(coach_pid) 
+   		REFERENCES Coach(personID)
+ );
+
+ 
+ CREATE TABLE Person(
+   personID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+   surname VARCHAR(255) NOT NULL,
+   lastname VARCHAR(255) NOT NULL,
+   date_of_birth DATE,
+   nationality VARCHAR(255) NOT NULL
+ );
+ 
+ CREATE INDEX Person_full_name_index ON Person(surname, lastname);
+ CREATE INDEX Person_nationality_index ON Person(nationality);
+ 
+
+CREATE TABLE Referee(
+  personID INTEGER NOT NULL PRIMARY KEY,
+  linemen_home VARCHAR(255) NOT NULL,
+  linemen_vistitor VARCHAR(255) NOT NULL,
+  fourth_official VARCHAR(255),
+  fifth_official VARCHAR(255),
+  var VARCHAR(255) NOT NULL,
+  CONSTRAINT Referee_fk_Person FOREIGN KEY(personID)
+  		REFERENCES Person(personID)
+);
+
+CREATE TABLE Club_President(
+  personID INTEGER NOT NULL PRIMARY KEY,
+  start_year YEAR,
+  retired_year YEAR,
+  clubID INTEGER NOT NULL,
+  CONSTRAINT Club_President_fk_Person FOREIGN KEY(personID)
+  		REFERENCES Person(personID),
+  CONSTRAINT Club_President_fk_Club FOREIGN KEY(clubID)
+  		REFERENCES Club(clubID)
+);
+
+CREATE TABLE Coach(
+  personID INTEGER NOT NULL PRIMARY KEY,
+  overall_matches INTEGER,
+  CONSTRAINT Coach_fk_Person FOREIGN KEY(personID)
+  		REFERENCES Person(personID)
+);
+
+CREATE TABLE Player (
+    personID INTEGER NOT NULL PRIMARY KEY,
+    overall_goals INTEGER,
+    overall_assists INTEGER,
+    overall_played_matches INTEGER,
+    CONSTRAINT Player_fk_Person FOREIGN KEY(personID)
+  		REFERENCES Person(personID)
+);
+
+CREATE TABLE Player_Per_Season (
+    personID INTEGER NOT NULL,
+    player_season INTEGER NOT NULL,
+    position VARCHAR(255),
+    teamID INTEGER NOT NULL,
+    CONSTRAINT Player_Per_Season_pk PRIMARY KEY(personID, player_season),
+    CONSTRAINT Player_Per_Season_fk_Player FOREIGN KEY(personID)	
+  		REFERENCES Person(personID),
+    CONSTRAINT Player_Per_Season_fk_team FOREIGN KEY(teamID)	
+  		REFERENCES Team(teamID)
+);
+                                                       
+CREATE INDEX Player_position_index ON Player_Per_Season(position);                                               
+
+CREATE TABLE Award (
+    awardID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    award_name VARCHAR(255) NOT NULL
+);
+                                                             
+CREATE INDEX Award_name_index ON Award(award_name);
+
+CREATE TABLE Player_Won_Award (
+    awardID INTEGER NOT NULL,
+    edition VARCHAR(255) NOT NULL,
+    personID INTEGER NOT NULL,
+    CONSTRAINT Player_Won_Award_pk PRIMARY KEY(awardID, edition, personID),
+    CONSTRAINT Player_Won_Award_fk_Award FOREIGN KEY (awardID)
+  		REFERENCES Award(awardID),
+    CONSTRAINT Player_Won_Award_fk_Player FOREIGN KEY(personID)
+  		REFERENCES Player(personID)
+);
+                                                             
+CREATE INDEX Player_Won_Award_edition_index ON Player_Won_Award(edition);
+
+CREATE TABLE Match(
+  matchID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
+  round INTEGER NOT NULL,
+  hgoals INTEGER,
+  vgoals INTEGER,
+  match_date TIME,
+  competitionID INTEGER NOT NULL,
+  season INTEGER NOT NULL,
+  home_tid INTEGER NOT NULL,
+  home_team_season INTEGER NOT NULL,
+  visitor_tid INTEGER NOT NULL,
+  visitor_team_season INTEGER NOT NULL,
+  referee_pid INTEGER NOT NULL,
+  CONSTRAINT Match_fk_Soccer_Competition_Season FOREIGN KEY(competitionID, season)
+  		REFERENCES Soccer_Competition_Season(competitionID, season),
+  CONSTRAINT Match_fk_Teams_Per_Season FOREIGN KEY(home_tid, home_team_season)
+  		REFERENCES Teams_Per_Season(teamID, team_season),
+  CONSTRAINT Match_fk_Teams_Per_Season FOREIGN KEY(visitor_tid, visitor_team_season)
+  		REFERENCES Teams_Per_Season(teamID, team_season),
+  CONSTRAINT Match_fk_Referee FOREIGN KEY(referee_pid)
+  		REFERENCES Referee(personID)
+ );
+CREATE TABLE Goal (
+    goalID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    goal_time time,
+    own_goal BOOL DEFAULT 0,
+    personID INTEGER NOT NULL,
+    season INTEGER NOT NULL,
+    matchID INTEGER NOT NULL,
+    CONSTRAINT Goal_fk_Match FOREIGN KEY (matchID) 
+  		REFERENCES Match(matchID) 
+);
+
+CREATE TABLE Competition_Winner (
+    winnerID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    competitionID INTEGER NOT NULL,
+    competition_season INTEGER NOT NULL,
+    teamID INTEGER NOT NULL,
+    team_season INTEGER NOT NULL,
+    CONSTRAINT Competition_Winner_fk_Soccer_Competition_Season FOREIGN KEY (competitionID, competition_season) 
+  		REFERENCES Soccer_Competition_Season(competitionID, season),
+    CONSTRAINT Competition_Winner_fk_Team_Per_Season FOREIGN KEY (teamID, team_season) 
+  		REFERENCES Team_Per_Season(teamID, team_season)
+);
+
+CREATE TABLE Competition_Award (
+    competitionID INTEGER NOT NULL PRIMARY KEY,
+    awardID INTEGER NOT NULL,
+    CONSTRAINT Competition_Award_pk_Soccer_Competition FOREIGN KEY(competitionID)
+    		REFERENCES Soccer_Competition(competitionID)
+);
+

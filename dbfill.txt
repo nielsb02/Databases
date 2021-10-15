@@ -1,0 +1,199 @@
+INSERT INTO Soccer_Competition (name, country)
+VALUES  
+	("Eredivisie", "Holland"),
+    ("Bundesliga", "Germany"),
+    ("LaLiga", "Spain"), 
+	("Champions league", "Europe");
+	
+INSERT INTO Soccer_Competition_Season(competitionID, season, start_date, end_date)
+VALUES
+	(1, 2021, 2020-09-01, 2021-05-16),
+	(2, 2021, 2020-09-16, 2021-05-28),
+	(3, 2021, 2020-09-08, 2021-05-10),
+	(4, 2021, 2020-08-30, 2021-05-06);
+
+INSERT INTO Arena(arenaID, name, city)
+VALUES 
+	(1, "test", "test");
+
+INSERT INTO Club(name, club_year, country, arenaID)
+VALUES
+	("Ado den Haag", 1905, "Netherlands", 1),
+	("AFC Ajax", 1900, "Netherlands", 1),
+	("Az", 1954, "Netherlands", 1),
+	("FC Groningen", 1971, "Netherlands", 1),
+	("FC Utrecht", 1970, "Netherlands", 1),
+	("Feyenoord", 1908, "Netherlands", 1);
+
+INSERT INTO Team(name, clubID)
+VALUES
+	("1e elftal", 1),
+	("Ado den Haag 021", 1),
+	("Ado vrouwen", 1),
+	("Ajax 1", 2),
+	("Jong Ajax", 2),
+	("Ajax vrouwen", 2),
+	("1e elftal", 3),
+	("jong Az", 3),
+	("Groningen 1", 4),
+	("1e elftal", 5),
+	("jong Utrecht", 5),
+	("Feyenoord 021", 6),
+	("Feyenoord 018", 6),
+	("Beloften vouwen", 6),
+	("Feyenoord M016", 6);
+	
+	
+
+
+INSERT INTO Person(surname, lastname, date_of_birth, nationality)
+VALUES
+	("Maarten", "Stekelenburg", 1982-09-22, "Dutch"),
+	("Jurrien", "Timber", 2001-06-17, "Curacao"),
+	("Perr", "Schuurs", 1999-11-26, "Dutch"),
+	("Edson", "Alvarez", 1997-10-10, "Mexico"),
+	("Sean", "Klaiber", 1994-07-31, "Suriname"),
+	("Davy", "Klaasen", 1993-02-21, "Dutch"),
+	("David", "Neres", 1997-03-03, "Brazil"),
+	("Ryan", "Gravenberch", 2002-05-16, "Suriname"),
+	("Ousssame", "Idrissi", 1996-02-26, "Morocco"),
+	("Dusan", "Tadic", 1988-11-20, "Serbia"),
+	("Noussair", "Mazraoui", 1997-11-14, "Morocco"),
+	("Ronald", "Koeman", 1963-03-21, "Dutch"),
+    ("Erik", "Tenhag", 1970-02-02, "Dutch"),
+    ("Dick", "Advocaat", 1947-09-27, "Dutch"),
+    ("Roger", "Schmidt", 1967-03-13, "Germany"),
+    ("Danny", "Buijs", 1982-06-21, "Dutch"),
+    ("Bjorn", "Kuipers", 1973-03-28, "Dutch"),
+   	("Danny", "Makkelie", 1983-01-28, "Dutch"),
+    ("Serdar", "Gözübüyük", 1985-08-29, "Dutch");
+	
+INSERT INTO Coach(personID, Overall_matches)
+VALUES
+	(12, 723),
+	(13, 380),
+	(14, 145),
+	(15, 562),
+	(16, 166);
+	
+INSERT INTO Teams_per_Season(teamID, team_season, clubID, coach_pid)
+VALUES
+	(13, 2021, 2, 13),
+	(4, 2021, 2, 12),
+	(12, 2021, 6, 12),
+	(7, 2021, 3, 12),
+	(12, 2020, 6, 14),
+	(1, 2021, 1, 15),
+    (2, 2021, 1, 16);
+	
+INSERT INTO Referee (personID, linemen_home, linemen_vistitor, var)
+VALUES  
+	(17, "Kevin Blom", "Pol van Boekel", "Bas Nijhuis"),
+    (18, "Jeroen Manschoot", "Siemen Mulder", "Christiaan Bax"),
+    (19, "Dennis Higler", "Jochem Kamphuis", "Edwin van de Graaf");
+	
+
+INSERT INTO Match (round, competitionID, season, home_tid, home_team_season, visitor_tid, visitor_team_season, referee_pid)
+VALUES  
+	(1, 1, 2021, 4, 2021, 12, 2021, 17),
+    (1, 1, 2021, 1, 2021, 7, 2021, 18),
+	(2, 1, 2021, 12, 2021, 4, 2021, 18),
+    (2, 1, 2021, 7, 2021, 1, 2021, 17),
+    (3, 1, 2021, 4, 2021, 1, 2021, 19),
+    (3, 1, 2021, 12, 2021, 7, 2021, 17);
+	
+INSERT INTO Goal (goal_time, personID, season, matchID)
+VALUES  
+	(12, 10, 2021, 1),
+	(27, 10, 2021, 1),
+	(8, 10, 2021, 1),
+	(88, 4, 2021, 2),
+	(92, 9, 2021, 2),
+	(47, 9, 2021, 4),
+	(63, 1, 2021, 5),
+	(67, 10, 2021, 6),
+	(75, 10, 2021, 6);
+
+INSERT INTO Player (personID, overall_goals, overall_assists, overall_played_matches)
+VALUES
+	(1, null, null, 432),
+	(2, 6, 4, 128),
+	(3, 20, 11, 156),
+	(4, 8, 3, 167),
+	(5, 16, 25, 235),
+	(6, 94, 57, 365),
+	(7, 48, 38, 161),
+	(8, 31, 26, 136),
+	(9, 64, 43, 248 ),
+	(10, 173, 183, 558),
+	(11, 17, 19, 199);
+	
+	
+INSERT INTO Player_per_Season(personID, player_season, teamID)
+VALUES
+	(1, 2018, 5),
+	(1, 2019, 4),
+	(1, 2020, 4),
+	(2, 2018, 4),
+	(2, 2019, 4),
+	(2, 2020, 4),
+	(3, 2018, 4),
+	(3, 2019, 8),
+	(3, 2020, 4),
+	(4, 2018, 1),
+	(4, 2019, 2),
+	(4, 2020, 4),
+	(5, 2018, 4),
+	(5, 2019, 4),
+	(5, 2020, 4),
+	(6, 2018, 5),
+	(6, 2019, 5),
+	(6, 2020, 4),
+	(7, 2019, 4),
+	(7, 2020, 4),
+	(8, 2020, 4),
+	(9, 2018, 7),
+	(9, 2019, 11),
+	(9, 2020, 4),
+	(10, 2018, 4),
+	(10, 2019, 1),
+	(10, 2020, 4),
+	(11, 2018, 5),
+	(11, 2019, 4),
+	(11, 2020, 4);
+
+INSERT INTO Award (award_name)
+VALUES
+	("Nederlandse Kampioen"),
+	("Nederlandse Bekerwinnaar"),
+	("Nederlandse Supercup Winnaar"),
+	("Gold Cup"),
+	("Mexican Champion"),
+	("Voetballer van het Jaar -nl");
+
+INSERT INTO Player_Won_Award (awardID, edition, personID)
+VALUES
+	(1, "2003/2004", 1),
+	(1, "2010/2011", 1),
+	(2, "2005/2006", 1),	
+	(2, "2009/2010", 1),
+	(3, "2008", 1),
+	(1, "2018/2019", 3),
+	(2, "2018/2019", 3),
+	(3, "2020", 3),
+	(4, "2019", 4),
+	(5, "2018/2019", 4),
+	(6, "2016", 6),
+	(3, "2014", 6),
+	(1, "2018/2019", 7),
+	(2, "2018/2019", 7),
+	(3, "2020", 7),
+	(1, "2018/2019", 8),
+	(2, "2018/2019", 8),
+	(1, "2018/2019", 10),
+	(2, "2018/2019", 10),
+	(3, "2020", 10),
+	(1, "2018/2019", 11),
+	(2, "2018/2019", 11),
+	(3, "2020", 11);
+	

@@ -1,0 +1,38 @@
+/*
+
+	Query: "Give the the first- and lastname, date_of_birth and nationality From all coaches who coached 
+	all of the "big Three" of the Netherlands, which are "Ajax", "AZ" and  "Feyenoord".
+
+	Coaches who coached the "big three" have a lot of experience and are therefore,
+	interesting to other clubs. This query displays these experienced coaches immediately.
+
+*/
+
+
+SELECT surname, lastname, date_of_birth, nationality
+FROM Person 
+	INNER JOIN
+	(
+		SELECT DISTINCT  TX.coach_pid
+		FROM Teams_Per_Season AS TX 
+		WHERE NOT EXISTS(
+			SELECT * 
+			FROM (
+				SELECT * FROM Club 
+				WHERE
+				clubID = 2
+				OR clubID = 3
+				OR clubID = 6
+			)AS C
+			WHERE NOT EXISTS ( 
+				SELECT * 
+				FROM Teams_Per_Season AS TY
+				WHERE (TX.coach_pid = TY.coach_pid)
+				AND (TY.clubID = C.clubID)))
+	)
+	AS subQuery
+	
+	ON Person.personID = subQuery.coach_pid;
+			
+			
+	

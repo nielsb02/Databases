@@ -1,0 +1,29 @@
+/*  
+We decided to fully outer join the team and club tables, 
+this way we now to which club a team belongs and from what country this team is.
+
+Altough most of the team names contain their club names, 
+but for example Ado, Az and Utrecht have the same the same team name: "1e elftal".
+And if we would add all data of their youth teams the would mostly al have the same team name. 
+
+This gives the query: "To what club does each team belong? In which year was the club established and in what country"
+
+*/
+
+
+--	We prefferd viewing the query in column mode and with headers on, thats where the dot(.) commands on the first two lines are for (this will be in every query).
+.mode column
+.header on
+
+SELECT Team.name, Club.name, Club.club_year, Club.country
+FROM Team
+	LEFT JOIN Club
+		ON Team.clubID = Club.clubID
+
+UNION ALL
+
+SELECT Team.name, Club.name, Club.club_year, Club.country
+FROM Club
+	LEFT JOIN Team
+		ON Team.clubID = Club.clubID
+WHERE Team.clubId IS NULL;

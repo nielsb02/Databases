@@ -1,0 +1,26 @@
+/*
+
+	Query: "Give the first- and last name, date of birth, nationality and the amount of matches played
+	for each player who has not won an award yet".
+	
+	With this query we would help to remind all young and or not so succesfull players,
+	that even one of the best players dont always get awards. 
+
+	We based our query after reading an article on "FourForTwo" with the following quote "sometimes life is just cruel. A combination of bad luck,
+ 	circumstance and blinding loyalty meant this diamond dozen ended their careers without a single medal on their mantel."
+
+	Aritcle: "12 great footballers who won absolutely nothing in their careers | FourFourTwo" https://cutt.ly/Xc84cgD
+		
+
+*/
+
+
+.mode column
+.header on
+
+SELECT Person.surname, Person.lastname, Person.date_of_birth, Person.nationality, Player.overall_played_matches
+FROM Person
+	LEFT JOIN Player
+		ON Person.personID = Player.personID
+	WHERE Player.personID NOT IN (SELECT personID FROM Player_Won_Award);
+

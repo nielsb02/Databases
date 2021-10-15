@@ -1,0 +1,26 @@
+/*
+	Query 3: Give the names, date_of_birth and nationality of all players who have only played for the club "AFC Ajax".
+	To supporters of the club loyalty of the players to their club is pretty important, 
+	supporters are able to see, which player played for the same club his whole carier even in the youth clubs. 
+	
+	We only added enough data for a maximum of 3 seasons per player, so it is less rare for a player to have played his whole carier (of 3 seasons) for one club.
+	
+*/
+
+
+.header on
+.mode column
+
+SELECT Person.surname, Person.lastname, Person.date_of_birth, Person.nationality
+FROM Person
+	INNER JOIN
+	(
+		SELECT personID FROM Player
+		WHERE personID IN (SELECT personID FROM Player_Per_Season)
+
+		EXCEPT
+		
+		SELECT personID FROM Player_Per_Season
+		WHERE teamID <> (SELECT teamID FROM Team WHERE clubID = 2)
+	) As subQuery
+	ON Person.personID = subQuery.personID;
